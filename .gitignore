@@ -1,0 +1,24 @@
+# 本地运行配置（含token，自动生成，不入库）
+转发器_配置.json
+
+# 运行产物
+转发器审计/
+*.log
+probe_heart.log
+q2m_probe_write.txt
+
+# 版本归档与快照工具（本地留存）
+历史版本/
+new_version.py
+
+# 构建产物
+__pycache__/
+build/
+dist/
+*.spec.bak
+
+# 工具会话状态
+.mimosa/
+.v2c/
+.video_agent/
+out/

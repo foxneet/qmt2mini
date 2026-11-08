@@ -1,0 +1,61 @@
+# -*- coding: utf-8 -*-
+"""qmt2mini 自带常量（与 xtquant.xtconstant 同值，局域网消费机无需安装xtquant）"""
+
+# ---- 账号类型 ----
+FUTURE_ACCOUNT = 1
+SECURITY_ACCOUNT = 2          # 股票账号
+CREDIT_ACCOUNT = 3            # 信用账号
+FUTURE_OPTION_ACCOUNT = 5
+STOCK_OPTION_ACCOUNT = 6
+HUGANGTONG_ACCOUNT = 7
+SHENGANGTONG_ACCOUNT = 11
+MARKET_ENUM_INDEX_FUTURE = 8
+MARKET_ENUM_SHANGHAI_FUTURE = 9
+MARKET_ENUM_DALIAN_FUTURE = 10
+MARKET_ENUM_ZHENGZHOU_FUTURE = 11
+MARKET_ENUM_GUANGZHOU_FUTURE = 12
+MARKET_ENUM_BEIJING = 13
+
+# ---- 委托类型 opType / orderType ----
+STOCK_BUY = 23                # 股票买入
+STOCK_SELL = 24               # 股票卖出
+STOCK_BUY_ETF = 23
+STOCK_SELL_ETF = 24
+CREDIT_BUY = 33               # 担保品买入
+CREDIT_SELL = 34              # 担保品卖出
+FUTURE_OPEN_LONG = 0
+FUTURE_CLOSE_TODAY_LONG = 2
+FUTURE_OPEN_SHORT = 3
+FUTURE_CLOSE_TODAY_SHORT = 5
+ORDER_TYPE_STOCK = 1101       # 单股单账号按股/手
+ORDER_TYPE_VALUE = 1102       # 按金额（仅股票）
+ORDER_TYPE_RATIO = 1123       # 可用比例
+
+# ---- 报价类型 prType ----
+LATEST_PRICE = 5              # 最新价
+FIX_PRICE = 11                # 指定价（限价）
+MARKET_PEER_PRICE_FIRST = 44
+MARKET_MINE_PRICE_FIRST = 45
+MARKET_SH_CONVERT_5_CANCEL = 42   # 上海最优五档即成剩撤
+MARKET_SH_CONVERT_5_LIMIT = 43    # 上海最优五档即成剩转
+MARKET_SZ_CONVERT_5_CANCEL = 46   # 深圳最优五档即成剩撤
+MARKET_SZ_CONVERT_1_CANCEL = 47   # 深圳最优一档即成剩撤
+MARKET_BEST = 49
+
+# ---- 委托状态 order_status（与内置EEntrustStatus同值） ----
+ORDER_UNKNOWN = 255
+ORDER_UNREPORTED = 48
+ORDER_WAIT_REPORTING = 49
+ORDER_REPORTED = 50
+ORDER_REPORTED_AND_CANCELING = 51
+ORDER_PART_SUCC_AND_CANCELING = 52
+ORDER_PART_CANCEL = 53
+ORDER_CANCELED = 54
+ORDER_PART_SUCC = 55
+ORDER_SUCCEEDED = 56
+ORDER_JUNK = 57               # 废单
+
+# ---- 市场 ----
+SH_MARKET = 'SH'
+SZ_MARKET = 'SZ'
+BJ_MARKET = 'BJ'
