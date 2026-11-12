@@ -43,6 +43,7 @@ DEFAULT_CONFIG = {
     'allow_trade': False,
     'audit_dir': os.path.join(BASE_DIR, '转发器审计'),
     'tq_relay': {'enabled': False, 'url': 'http://127.0.0.1:17710', 'token': ''},
+    'l2': {'enabled': False},
     'qmt_log_dir': r'D:\QMT\userdata\log',
     'print_prefix': 'Q2M:',
 }
@@ -50,6 +51,7 @@ DEFAULT_CONFIG = {
 PROTO_VER = 1
 MAX_FRAME = 64 * 1024 * 1024
 ORDER_OPS = {'order_stock', 'order_stock_async', 'cancel_order_stock'}
+L2_OPS = {'get_l2_data'}
 
 # op -> 默认超时秒(HTTP网关用)
 OP_TIMEOUT = {
@@ -190,6 +192,7 @@ class Core:
             'errors': self.stats['errors'],
             'allow_trade': self.cfg.get('allow_trade', False),
             'tq_relay': dict(self.cfg.get('tq_relay') or {}),
+            'l2': dict(self.cfg.get('l2') or {}),
             'native_bars': {'codes': len(set(self.bar_cur) | set(self.bar_done)),
                             'minutes': sum(len(v) for v in self.bar_done.values())},
             'q2m_print': {'last_seen_sec': round(time.time() - self.q2m_last_seen, 1)
@@ -314,6 +317,9 @@ class Core:
         if op in ORDER_OPS and not self.cfg.get('allow_trade'):
             self.audit.write('%s | 类别=%s | 拒绝: allow_trade未开启' % (ip, op))
             return {'ok': False, 'err': '下单功能未开启: allow_trade=false(配置文件修改后重启)'}
+        if op in L2_OPS and not (self.cfg.get('l2') or {}).get('enabled'):
+            self.audit.write('%s | 类别=%s | 拒绝: L2未开启' % (ip, op))
+            return {'ok': False, 'err': 'L2行情未开启: 配置 l2.enabled=true 后重启'}
         req_json = json.dumps({'op': op, 'args': args}, ensure_ascii=False)
         self.stats['requests'] += 1
         t0 = time.time()
@@ -390,6 +396,11 @@ class Core:
             if op in ORDER_OPS and not self.cfg.get('allow_trade'):
                 cli.send({'t': 'resp', 'id': orig_id, 'ok': False,
                           'err': '下单功能未开启: allow_trade=false'})
+                return
+            if op in L2_OPS and not (self.cfg.get('l2') or {}).get('enabled'):
+                cli.send({'t': 'resp', 'id': orig_id, 'ok': False,
+                          'err': 'L2行情未开启: 配置 l2.enabled=true 后重启'})
+                return
                 return
             args = msg.get('args') or {}
             req_json = json.dumps({'op': op, 'args': args}, ensure_ascii=False)

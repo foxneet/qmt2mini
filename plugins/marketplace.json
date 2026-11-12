@@ -1,0 +1,18 @@
+{
+  "name": "dev-qmt-2792cc90",
+  "plugins": [
+    {
+      "name": "tzzb-mcp",
+      "source": "./tzzb-mcp",
+      "version": "0.1.0",
+      "description": "Connect to the THS Investment Ledger (TZZB) remote MCP server; OAuth authorize then use its ledger tools",
+      "displayName": "投资账本 MCP",
+      "displayName_i18n": {
+        "zh-CN": "投资账本 MCP"
+      },
+      "description_i18n": {
+        "zh-CN": "接入同花顺投资账本远程 MCP（tzzb.10jqka.com.cn/mcp），OAuth 授权后即可在对话中使用其账本工具"
+      }
+    }
+  ]
+}

@@ -28,7 +28,7 @@ import zlib
 # ================= 配置 =================
 SERVER_IP = '127.0.0.1'
 SERVER_PORT = 51880
-BRIDGE_TOKEN = ''
+BRIDGE_TOKEN = 'PASTE_TOKEN_HERE'   # 与 转发器_配置.json 一致, 变了就改这行
 MAIN_TICK_SECONDS = 1        # 主循环拍: tick差分+print推送
 SNAP_EVERY_TICKS = 10        # 交易快照间隔(主循环拍数)
 CMD_POLL_SECONDS = 60        # 指令通道连接间隔(默认; 服务端可动态调整)
@@ -37,7 +37,9 @@ PRINT_PREFIX = 'Q2M:'
 PRINT_CHUNK = 40             # b64片长(字符): 行总长~60, 远离引擎~83字符换行边界
 
 _INDEX_CODE = {'SH': '000300.SH', 'SZ': '399001.SZ', 'BJ': '899050.BJ'}
-_CANCELABLE_STATUS = (49, 50, 51, 52)
+_CANCELABLE_STATUS = (49, 50, 51, 52)   # 待报/部撤中状态
+_L2_PERIODS = ('l2quote', 'l2quoteaux', 'l2order', 'l2transaction',
+               'l2transactioncount', 'l2orderqueue')   # L2行情周期(需券商L2数据权限)
 
 
 class _BridgeState(object):
@@ -210,6 +212,23 @@ def _dispatch_op(ContextInfo, op, args):
 
     if op == 'get_instrument_detail':
         return _jsonable(ContextInfo.get_instrument_detail(args.get('code') or ''))
+
+    if op == 'get_l2_data':
+        # L2行情(需券商L2数据权限): period取 _L2_PERIODS 之一, 走get_market_data_ex透传
+        codes = list(args.get('codes') or [])
+        fields = list(args.get('fields') or [])
+        period = args.get('period') or 'l2quote'
+        if period not in _L2_PERIODS:
+            raise Exception('L2周期非法: %s (可用: %s)' % (period, ','.join(_L2_PERIODS)))
+        count = max(1, min(int(args.get('count', 50)), 1000))
+        dfs = ContextInfo.get_market_data_ex(
+            fields, codes, period, '', '', count, 'none')
+        out = {}
+        for code, df in (dfs or {}).items():
+            out[code] = {'columns': [str(x) for x in df.columns],
+                         'index': [str(x) for x in df.index],
+                         'rows': df.values.tolist()}
+        return out
 
     if op == 'get_stock_list_in_sector':
         return _jsonable(ContextInfo.get_stock_list_in_sector(args.get('sector') or '沪深A股'))
