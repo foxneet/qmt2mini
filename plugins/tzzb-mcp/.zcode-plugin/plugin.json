@@ -1,8 +1,0 @@
-{
-  "name": "tzzb-mcp",
-  "version": "0.1.0",
-  "description": "Connect to the THS Investment Ledger (TZZB) remote MCP server; OAuth authorize then use its ledger tools",
-  "author": { "name": "foxneet" },
-  "skills": "./skills",
-  "mcpServers": "./.mcp.json"
-}

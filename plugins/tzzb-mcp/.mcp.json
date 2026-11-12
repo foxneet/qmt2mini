@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "tzzb": {
-      "type": "http",
-      "url": "https://tzzb.10jqka.com.cn/mcp"
-    }
-  }
-}

@@ -22,3 +22,6 @@ dist/
 .v2c/
 .video_agent/
 out/
+
+# ZCode 插件脚手架（与本项目无关，勿入库）
+plugins/
